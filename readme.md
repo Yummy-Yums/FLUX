@@ -26,7 +26,7 @@ A lightweight command-line task manager built with Rust 🦀
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/flux.git
+git clone https://github.com/im-lunex/flux.git
 cd flux
 cargo build --release
 ```
