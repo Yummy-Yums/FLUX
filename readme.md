@@ -1,50 +1,70 @@
 # FLUX
 
-A simple command-line task manager built with Rust 🦀  
-Made for learning purposes – lightweight, file-based, and cross-platform.
+A lightweight command-line task manager built with Rust 🦀
 
 ---
 
-## What it does
-- Create and manage multiple users  
-- Add, view, delete, and update tasks  
-- Mark tasks as **done** or **pending**  
-- Search through tasks quickly  
-- Show basic task statistics  
-- Stores everything in plain text files (I/O based)
+## Features
+
+- Multi-user support
+- Add, view, edit, and delete tasks
+- Mark tasks as done or pending
+- Search through tasks
+- View task statistics
+- Export tasks to JSON
+- Plain text file storage
 
 ---
+
+## Quick Start
 
 ### Prerequisites
+
 - [Rust](https://rustup.rs/) (1.70+)
 - [Git](https://git-scm.com/)
 
-## Why this project?
+### Installation
 
-This project is mainly for **learning Rust**:
+```bash
+git clone https://github.com/im-lunex/flux.git
+cd flux
+cargo build --release
+```
 
-- Practicing CLI design  
-- File I/O handling  
-- Structs & enums for tasks  
-- Error handling & validation  
+### Usage
 
-It’s not meant to replace big task managers – just a fun way to practice Rust! 🚀
+```bash
+cargo run
+```
+
+Follow the on-screen prompts to:
+1. Create a new user or log in
+2. Manage your tasks through the intuitive menu system
+
+---
+
+## Why FLUX?
+
+This project was created as a learning exercise for Rust development, focusing on:
+- CLI design principles
+- File I/O operations
+- Data structures and error handling
+- Building a complete application from scratch
+
+It's not meant to replace full-featured task managers, but rather to demonstrate core Rust concepts in a practical application.
 
 ---
 
 ## Contributing
 
-Feel free to fork, experiment, or suggest improvements.  
-It’s a learning playground, so ideas are always welcome. ✨
+Feel free to fork the project and submit pull requests. Since this is primarily a learning project, all suggestions and improvements are welcome!
 
 ---
 
-## 📄 License
+## License
 
-MIT License – free to use and share.  
+MIT License - free to use and modify.
 
 ---
 
 Made with ❤️ in Rust 🦀
-
-Happy Coding.....
