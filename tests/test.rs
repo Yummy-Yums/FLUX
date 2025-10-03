@@ -1,9 +1,10 @@
-use std::fs;
 use flux::auth::{authenticate_user, create_user};
 use flux::tasks::storage::{get_all_tasks, save_tasks};
 use flux::tasks::task::Task;
 use flux::ui::display::export_to_json;
 use flux::utils::validation::validate_task_content;
+use std::fs;
+use std::process::Command;
 
 fn cleanup_user_file(username: &str) {
     let filename = format!("{}.txt", username);
@@ -160,4 +161,22 @@ fn test_edit_task() {
     assert_eq!(loaded_tasks[0].content, "Updated Content");
 
     cleanup_user_file(username);
+}
+
+#[test]
+fn test_that_cli_displays_help_menu(){
+    // Run the binary
+    let output = Command::new("./target/debug/flux")
+        .args(&["tasks", "--view-completed", "--username", "yums", "--password", "yums"])
+        .output()
+        .expect("Failed to execute command");
+
+    println!("{:?}",  output);
+
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8(output.stdout).unwrap();
+    assert!(stdout.contains("des"));
+    assert!(stdout.contains("Total: 3"));
+
 }

@@ -1,6 +1,7 @@
 use crate::tasks::task::Task;
 use std::fs;
 
+// TODO- refactor both parse functions properly since they share common data
 pub fn parse_task_line_advanced(line: &str) -> Option<Task> {
     let after_prefix = line.strip_prefix("task_")?;
     let parts: Vec<&str> = after_prefix.split(" | ").collect();
@@ -11,12 +12,14 @@ pub fn parse_task_line_advanced(line: &str) -> Option<Task> {
     let status_part = parts[1].strip_prefix("status: ")?;
     let completed = status_part == "done";
     let created_part = parts[2].strip_prefix("created: ").unwrap_or("Unknown");
+    let completed_part = parts[3].strip_prefix("completed: ").unwrap_or("Unknown");
 
     Some(Task {
         id: id_part.trim().to_string(),
         content: content_part.trim().to_string(),
         completed,
         created_at: created_part.to_string(),
+        completed_at: completed_part.to_string(),
     })
 }
 
@@ -28,6 +31,7 @@ pub fn parse_task_line_simple(line: &str) -> Option<Task> {
         content: content_part.trim().to_string(),
         completed: false,
         created_at: "Unknown".to_string(),
+        completed_at: "".to_string(),
     })
 }
 

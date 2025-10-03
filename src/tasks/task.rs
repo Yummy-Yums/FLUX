@@ -6,6 +6,7 @@ pub struct Task {
     pub content: String,
     pub completed: bool,
     pub created_at: String,
+    pub completed_at: String,
 }
 
 impl Task {
@@ -15,16 +16,18 @@ impl Task {
             content,
             completed: false,
             created_at: chrono::Utc::now().format("%Y-%m-%d %H:%M:%S").to_string(),
+            completed_at: "".to_string(),
         }
     }
 
     pub fn to_file_line(&self) -> String {
         format!(
-            "task_{}: {} | status: {} | created: {}",
+            "task_{}: {} | status: {} | created: {} | completed: {}",
             self.id,
             self.content,
             if self.completed { "done" } else { "pending" },
-            self.created_at
+            self.created_at,
+            self.completed_at
         )
     }
 }
