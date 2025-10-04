@@ -1,6 +1,6 @@
 use std::fs;
 use std::io::{self, Write};
-
+use chrono::Utc;
 use inquire::Text;
 
 use crate::auth::{authenticate_user, create_user};
@@ -89,7 +89,7 @@ pub fn task_management_menu(username: String) {
         }
 
         match command.trim() {
-            "1" => view_task(&username),
+            "1" => view_task(&username, "all"),
             "2" => add_task(&username),
             "3" => delete_task(&username),
             "4" => edit_task(&username),
@@ -164,25 +164,32 @@ pub fn edit_task(username: &str) {
     }
 }
 
-pub fn view_task(username: &str) {
-    let tasks = get_all_tasks(username);
+// refactor to add completed tasks or not , "all" for both pending tasks, "completed" for only "completed"
+pub fn view_task(username: &str, option: &str) {
+    let tasks: Vec<Task> = get_all_tasks(username);
+
+    let filtered_tasks: Vec<&Task> = match option {
+        "pending" => tasks.iter().filter(|t| !t.completed).collect(),
+        "completed" => tasks.iter().filter(|t| t.completed).collect(),
+        "all" | _ => tasks.iter().collect(),
+    };
 
     println!(
-        "\n{}ID      Description                Status    Created{}",
-        BOLD, RESET
+        "{}{:<10} {:<25} {:<8}  {:<25}{:<25}{}",
+        BOLD, "ID", "Description", "Status", "Created", "Completed", RESET
     );
-    println!("------------------------------------------------------");
+    println!("{}", "-".repeat(100));
 
     if tasks.is_empty() {
         println!("{}(no tasks found){}", DIM, RESET);
         return;
     }
 
-    for task in &tasks {
-        let (status_text, status_color) = if task.completed {
-            ("DONE", GREEN)
+    for task in filtered_tasks {
+        let (status_text, status_color, row_color) = if task.completed {
+            ("DONE", GREEN, DIM)
         } else {
-            ("PENDING", YELLOW)
+            ("PENDING", YELLOW, "")
         };
 
         let truncated_desc = if task.content.len() > 23 {
@@ -191,10 +198,8 @@ pub fn view_task(username: &str) {
             task.content.clone()
         };
 
-        let row_color = if task.completed { DIM } else { "" };
-
         println!(
-            "{}{:<8} {:<25} {}{:<9}{} {}{}",
+            "{}{:<8} {:<25} {}{:<9}{} {}  {:>9}{}",
             row_color,
             task.id,
             truncated_desc,
@@ -202,11 +207,11 @@ pub fn view_task(username: &str) {
             status_text,
             RESET,
             task.created_at,
+            task.completed_at,
             if task.completed { RESET } else { "" }
         );
     }
-
-    println!("------------------------------------------------------");
+    println!("{}", "-".repeat(100));
 
     let completed_count = tasks.iter().filter(|task| task.completed).count();
     let pending_count = tasks.len() - completed_count;
@@ -328,6 +333,8 @@ fn mark_task_status(username: &str, completed: bool, status_name: &str) {
         Ok(choice) if choice > 0 && choice <= relevant_tasks.len() => {
             let (original_index, _) = relevant_tasks[choice - 1];
             tasks[original_index].completed = completed;
+            let completed_at = Utc::now().format("%Y-%m-%d %H:%M:%S").to_string();
+            tasks[original_index].completed_at.push_str(completed_at.as_str());
             match save_tasks(username, &tasks) {
                 Ok(()) => println!("[OK] Task marked as {}.", status_name),
                 Err(e) => eprintln!("[ERR] Could not update task: {}", e),
@@ -390,6 +397,7 @@ fn try_flush_stdout() {
         eprintln!("Warning: failed to flush stdout: {}", e);
     }
 }
+
 fn try_read_line(buf: &mut String) {
     if let Err(e) = io::stdin().read_line(buf) {
         eprintln!("Error: failed to read line: {}", e);
