@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub fn cli_help_display(){
+pub fn cli_help_display() {
     // TODO- refactor to use hashmaps
     let list_of_commands = ["tasks", "list"];
     let help_msg = r#"
@@ -19,23 +19,18 @@ pub fn cli_help_display(){
      tasks  view completed,pending or all tasks
      list   <to be continued>
 
-    "#.lines()
-        .map(|l| {
-            let res = match l {
-                l if l.contains("--") =>  {
-                    l
-                },
-                l if list_of_commands.iter().any(|cmd| l.contains(cmd)) => {
-                    l
-                }
-                _ => l.trim_start()
-              };
-            res
-           }
-
-        )
-        .collect::<Vec<&str>>().join("\n");
+    "#
+    .lines()
+    .map(|l| {
+        let res = match l {
+            l if l.contains("--") => l,
+            l if list_of_commands.iter().any(|cmd| l.contains(cmd)) => l,
+            _ => l.trim_start(),
+        };
+        res
+    })
+    .collect::<Vec<&str>>()
+    .join("\n");
 
     println!("{}", help_msg);
-
 }

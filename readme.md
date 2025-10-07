@@ -57,7 +57,7 @@ It's not meant to replace full-featured task managers, but rather to demonstrate
 
 ## Contributing
 
-Feel free to fork the project and submit pull requests. Since this is primarily a learning project, all suggestions and improvements are welcome!
+Please look at the process of contributing if you wish to do so [`CONTRIBUTING.md`](contributing.md)
 
 ---
 
