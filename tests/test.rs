@@ -151,7 +151,7 @@ fn test_edit_task() {
     let password = "pass123";
     setup_user(username, password, vec![Task::new("Old Content".into())]);
 
-    let mut tasks = get_all_tasks(username);
+    let tasks = get_all_tasks(username);
     assert_eq!(tasks[0].content, "Old Content");
 
     // edit_task_content(&mut tasks, 0, "Updated Content").unwrap();
@@ -164,8 +164,40 @@ fn test_edit_task() {
 }
 
 #[test]
-fn test_that_cli_displays_help_menu() {
+fn test_that_cli_command_passes_with_existing_user() {
     // Run the binary
+    // check if the user exists before running the tests
+    let username = "taskuser";
+    let password = "pass123";
+    setup_user(username, password, vec![]);
+
+    let output = Command::new("./target/debug/flux")
+        .args(&[
+            "tasks",
+            "--view-completed",
+            "--username",
+            "taskuser",
+            "--password",
+            "pass123",
+        ])
+        .output()
+        .expect("Failed to execute command");
+
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8(output.stdout).unwrap();
+    println!("{}", stdout);
+
+    let message = "=== Flux ===\n\u{1b}[1mID         Description               Status    Created                  Completed                \u{1b}[0m\n----------------------------------------------------------------------------------------------------\n\u{1b}[2m(no tasks found)\u{1b}[0m";
+    assert_eq!(stdout.trim(), message.trim());
+
+}
+
+#[test]
+fn test_that_cli_command_passes_without_existing_user() {
+    // Run the binary
+    // check if the user exists before running the tests
+
     let output = Command::new("./target/debug/flux")
         .args(&[
             "tasks",
@@ -178,11 +210,10 @@ fn test_that_cli_displays_help_menu() {
         .output()
         .expect("Failed to execute command");
 
-    println!("{:?}", output);
+    assert!(!output.status.success());
 
-    assert!(output.status.success());
-
-    let stdout = String::from_utf8(output.stdout).unwrap();
-    assert!(stdout.contains("des"));
-    assert!(stdout.contains("Total: 3"));
+    let stdout = String::from_utf8(output.stderr).unwrap();
+    println!("{}", stdout);
+    assert!(stdout.contains("User not found, please try again"));
 }
+

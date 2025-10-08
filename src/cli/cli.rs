@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 pub fn cli_help_display() {
     // TODO- refactor to use hashmaps
     let list_of_commands = ["tasks", "list"];
