@@ -1,7 +1,7 @@
-use std::fs;
-use std::io::{self, Write};
 use chrono::Utc;
 use inquire::Text;
+use std::fs;
+use std::io::{self, Write};
 
 use crate::auth::{authenticate_user, create_user};
 use crate::tasks::statistics::show_task_statistics;
@@ -334,7 +334,9 @@ fn mark_task_status(username: &str, completed: bool, status_name: &str) {
             let (original_index, _) = relevant_tasks[choice - 1];
             tasks[original_index].completed = completed;
             let completed_at = Utc::now().format("%Y-%m-%d %H:%M:%S").to_string();
-            tasks[original_index].completed_at.push_str(completed_at.as_str());
+            tasks[original_index]
+                .completed_at
+                .push_str(completed_at.as_str());
             match save_tasks(username, &tasks) {
                 Ok(()) => println!("[OK] Task marked as {}.", status_name),
                 Err(e) => eprintln!("[ERR] Could not update task: {}", e),

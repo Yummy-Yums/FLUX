@@ -4,25 +4,26 @@ use crate::ui::display::*;
 use std::io::{self, Write};
 
 pub fn main_menu() {
-
     let args = std::env::args().collect::<Vec<String>>();
 
-    if args.len() > 1  {
+    if args.len() > 1 {
         for arg in &args[1..] {
             match arg.as_str() {
                 "--help" => {
                     cli_help_display();
                     std::process::exit(1);
-                },
+                }
                 "tasks" => {
-
-                    let check_sub_command = args.iter().find(|arg| *arg == "--view-completed").is_some();
+                    let check_sub_command =
+                        args.iter().find(|arg| *arg == "--view-completed").is_some();
 
                     if !check_sub_command {
-                        eprintln!("\
+                        eprintln!(
+                            "\
                             [ERR] Invalid subcommand. \
                             please run help to pass in valid subcommand \
-                        ");
+                        "
+                        );
                         std::process::exit(1);
                     }
 
@@ -37,23 +38,22 @@ pub fn main_menu() {
                         .map(|x| &args[x + 1]);
 
                     if get_username.is_none() || get_password.is_none() {
-                        eprintln!("\
+                        eprintln!(
+                            "\
                             [ERR] Invalid username or password provided. \
                             please provide both for authentication \
-                        ");
+                        "
+                        );
                         std::process::exit(1);
                     }
 
-                    let authenticated = authenticate_user(
-                        get_username.unwrap(), 
-                        get_password.unwrap()
-                    );
+                    let authenticated =
+                        authenticate_user(get_username.unwrap(), get_password.unwrap());
 
                     if !authenticated {
                         eprintln!("User not found, please try again");
                         std::process::exit(1);
                     }
-
 
                     view_task(get_username.unwrap(), "completed");
 
@@ -62,11 +62,10 @@ pub fn main_menu() {
                 _ => {
                     println!("command not found run --help for cli_help_display");
                     std::process::exit(1)
-                },
+                }
             }
         }
     } else {
-
         loop {
             println!("\nMain Menu:");
             println!("[1] Create new user");
@@ -91,5 +90,4 @@ pub fn main_menu() {
             }
         }
     }
-
 }

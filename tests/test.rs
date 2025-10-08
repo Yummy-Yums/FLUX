@@ -164,19 +164,25 @@ fn test_edit_task() {
 }
 
 #[test]
-fn test_that_cli_displays_help_menu(){
+fn test_that_cli_displays_help_menu() {
     // Run the binary
     let output = Command::new("./target/debug/flux")
-        .args(&["tasks", "--view-completed", "--username", "yums", "--password", "yums"])
+        .args(&[
+            "tasks",
+            "--view-completed",
+            "--username",
+            "yums",
+            "--password",
+            "yums",
+        ])
         .output()
         .expect("Failed to execute command");
 
-    println!("{:?}",  output);
+    println!("{:?}", output);
 
     assert!(output.status.success());
 
     let stdout = String::from_utf8(output.stdout).unwrap();
     assert!(stdout.contains("des"));
     assert!(stdout.contains("Total: 3"));
-
 }
