@@ -11,7 +11,7 @@ pub fn main_menu() {
             match arg.as_str() {
                 "--help" => {
                     cli_help_display();
-                    std::process::exit(1);
+                    std::process::exit(0);
                 }
                 "tasks" => {
                     let check_sub_command =
