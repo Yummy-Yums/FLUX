@@ -2,6 +2,9 @@
 
 A lightweight command-line task manager built with Rust 🦀
 
+Read more complete documentation belo
+
+[![DeepWiki Docs](https://deepwiki.com/badge.svg)](https://deepwiki.com/badge-maker?url=https%3A%2F%2Fdeepwiki.com%2Fim-lunex%2FFLUX)
 ---
 
 ## Features
